@@ -142,24 +142,24 @@ export default function Portfolio() {
     }
   };
 
-  // Remover o useEffect de scroll entre seções
+
 
   const projects = [
     {
       title: "Sistema Bancário Web",
       description:
         "Aplicativo web desenvolvido como projeto acadêmico, simulando operações bancárias reais. Fui responsável pelo design, implementação e manutenção do banco de dados PostgreSQL, garantindo integridade, segurança e performance dos dados. Também atuei como desenvolvedor backend, criando APIs RESTful e regras de negócio utilizando Spring Boot.",
-      image: "banco.png",
+      image: "bancoinicio.png",
       technologies: ["PostgreSQL", "Spring Boot", "Java", "APIs REST"],
       github: "https://github.com/seuusuario/sistema-bancario-web",
       demo: "modal",
       demoContent: {
         type: "images",
         images: [
-          "/banco-login.png",
-          "/banco-dashboard.png",
-          "/banco-transacoes.png",
-          "/banco-cartao.png"
+          "/bancoregistro.png",
+          "/bancohome.png",
+          "/bancofatura.png",
+          "/bancocartoes.png"
         ],
         description: "Sistema bancário completo com autenticação, dashboard interativo, gestão de transações e controle de cartão de crédito. Interface moderna e responsiva desenvolvida com foco na experiência do usuário."
       },
@@ -422,7 +422,7 @@ export default function Portfolio() {
                   <img
                     src={project.image}
                     alt={project.title}
-                    className="absolute inset-0 w-full h-full object-fill z-0"
+                    className="absolute inset-0 w-full h-full object-cover z-0"
                   />
                   <div className="absolute inset-0 bg-grid-pattern opacity-30 pointer-events-none"></div>
                 </div>
@@ -494,60 +494,60 @@ export default function Portfolio() {
 
       {/* Modal de Demonstração */}
       <Dialog open={isDemoModalOpen} onOpenChange={closeDemoModal}>
-        <DialogContent className="max-w-6xl max-h-[95vh] overflow-hidden bg-black/95 backdrop-blur-xl border border-cyan-500/30 rounded-xl">
-          <DialogHeader className="text-center pb-6">
-            <DialogTitle className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">
+        <DialogContent className="max-w-7xl max-h-[98vh] overflow-hidden bg-black/95 backdrop-blur-xl border border-cyan-500/30 rounded-xl animate-in fade-in-0 zoom-in-95 duration-300">
+          <DialogHeader className="text-center pb-8">
+            <DialogTitle className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 animate-in slide-in-from-top-2 duration-500">
               {currentDemoProject?.title}
             </DialogTitle>
           </DialogHeader>
           
-          <div className="space-y-6">
+          <div className="space-y-8">
             {/* Descrição */}
-            <div className="bg-gradient-to-r from-cyan-500/5 via-purple-500/5 to-pink-500/5 rounded-lg border border-cyan-500/20 p-6">
+            <div className="bg-gradient-to-r from-cyan-500/5 via-purple-500/5 to-pink-500/5 rounded-lg border border-cyan-500/20 p-8 animate-in slide-in-from-top-2 duration-500 delay-100">
               <p className="text-gray-300 text-lg leading-relaxed text-center">
                 {currentDemoProject?.demoContent?.description}
               </p>
             </div>
             
             {/* Layout: Fotos + Tecnologias */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-in slide-in-from-bottom-2 duration-500 delay-200">
               {/* Fotos - Ocupa 2/3 do espaço */}
-              <div className="lg:col-span-2">
-                <div className="relative aspect-[16/9] bg-gradient-to-br from-cyan-500/10 via-purple-500/10 to-pink-500/10 rounded-lg overflow-hidden border border-cyan-500/20">
+              <div className="lg:col-span-2 space-y-4">
+                <div className="relative aspect-[16/9] bg-gradient-to-br from-cyan-500/10 via-purple-500/10 to-pink-500/10 rounded-lg overflow-hidden border border-cyan-500/20 group hover:border-cyan-500/40 transition-all duration-500">
                   {currentDemoProject?.demoContent?.images && (
                     <>
                       <img
                         src={currentDemoProject.demoContent.images[currentImageIndex]}
                         alt={`${currentDemoProject.title} - Imagem ${currentImageIndex + 1}`}
-                        className="w-full h-full object-contain transition-all duration-500"
+                        className="w-full h-full object-contain transition-all duration-700 ease-out"
                       />
                       
                       {/* Overlay gradiente */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none"></div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                       
                       {/* Botões de Navegação */}
                       {currentDemoProject.demoContent.images.length > 1 && (
                         <>
                           <button
                             onClick={prevImage}
-                            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white p-3 rounded-full transition-all duration-300 hover:scale-110 border border-cyan-500/30"
+                            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white p-3 rounded-full transition-all duration-300 hover:scale-110 border border-cyan-500/30 hover:border-cyan-400 opacity-0 group-hover:opacity-100"
                           >
                             <ChevronLeft className="w-5 h-5" />
                           </button>
                           <button
                             onClick={nextImage}
-                            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white p-3 rounded-full transition-all duration-300 hover:scale-110 border border-cyan-500/30"
+                            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white p-3 rounded-full transition-all duration-300 hover:scale-110 border border-cyan-500/30 hover:border-cyan-400 opacity-0 group-hover:opacity-100"
                           >
                             <ChevronRight className="w-5 h-5" />
                           </button>
                           
                           {/* Indicadores */}
-                          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-3">
+                          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                             {currentDemoProject.demoContent.images.map((_: any, index: number) => (
                               <button
                                 key={index}
                                 onClick={() => setCurrentImageIndex(index)}
-                                className={`w-3 h-3 rounded-full transition-all duration-300 border border-cyan-500/30 ${
+                                className={`w-3 h-3 rounded-full transition-all duration-300 border border-cyan-500/30 hover:scale-125 ${
                                   index === currentImageIndex 
                                     ? 'bg-gradient-to-r from-cyan-400 to-purple-400 scale-125' 
                                     : 'bg-white/30 hover:bg-white/50'
@@ -563,8 +563,8 @@ export default function Portfolio() {
                 
                 {/* Contador de imagens */}
                 {currentDemoProject?.demoContent?.images && currentDemoProject.demoContent.images.length > 1 && (
-                  <div className="text-center mt-3">
-                    <span className="text-cyan-400 text-sm font-medium">
+                  <div className="text-center">
+                    <span className="text-cyan-400 text-sm font-medium bg-black/20 px-4 py-2 rounded-full border border-cyan-500/20">
                       {currentImageIndex + 1} de {currentDemoProject.demoContent.images.length}
                     </span>
                   </div>
@@ -573,15 +573,15 @@ export default function Portfolio() {
               
               {/* Tecnologias - Ocupa 1/3 do espaço */}
               <div className="lg:col-span-1">
-                <div className="bg-gradient-to-br from-cyan-500/5 via-purple-500/5 to-pink-500/5 rounded-lg border border-cyan-500/20 p-6 h-full">
-                  <h3 className="text-xl font-bold text-cyan-400 mb-4 text-center">
+                <div className="bg-gradient-to-br from-cyan-500/5 via-purple-500/5 to-pink-500/5 rounded-lg border border-cyan-500/20 p-6 h-full hover:border-cyan-500/40 transition-all duration-500">
+                  <h3 className="text-xl font-bold text-cyan-400 mb-6 text-center">
                     Tecnologias Utilizadas
                   </h3>
-                  <div className="flex flex-wrap gap-3 justify-center">
+                  <div className="flex flex-wrap gap-3 justify-center mb-8">
                     {currentDemoProject?.technologies?.map((tech: string, index: number) => (
                       <Badge
                         key={index}
-                        className="bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-cyan-300 border border-cyan-500/30 hover:border-cyan-500/50 transition-colors duration-300 px-4 py-2"
+                        className="bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-cyan-300 border border-cyan-500/30 hover:border-cyan-500/50 hover:scale-105 transition-all duration-300 px-4 py-2 cursor-pointer"
                       >
                         {tech}
                       </Badge>
@@ -589,12 +589,12 @@ export default function Portfolio() {
                   </div>
                   
                   {/* Links do projeto */}
-                  <div className="mt-6 space-y-3">
+                  <div className="space-y-4">
                     <Button
                       asChild
                       size="sm"
                       variant="outline"
-                      className="w-full border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-black bg-transparent"
+                      className="w-full border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-black bg-transparent hover:scale-105 transition-all duration-300"
                     >
                       <a
                         href={currentDemoProject?.github}
