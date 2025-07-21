@@ -103,6 +103,61 @@ export default function Portfolio() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Efeito para acompanhar o mouse no background
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+
+    // Gerar propriedades para os círculos
+    const newCircles: ParticleProps[] = [...Array(8)].map(() => ({
+      width: `${20 + Math.random() * 40}px`,
+      height: `${20 + Math.random() * 40}px`,
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      animationDelay: `${Math.random() * 15}s`,
+      animationDuration: `${8 + Math.random() * 4}s`,
+    }));
+    setCircleParticles(newCircles);
+
+    // Gerar propriedades para os quadrados
+    const newSquares: ParticleProps[] = [...Array(12)].map(() => ({
+      width: `${8 + Math.random() * 16}px`,
+      height: `${8 + Math.random() * 16}px`,
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      animationDelay: `${Math.random() * 20}s`,
+      animationDuration: `${8 + Math.random() * 4}s`,
+    }));
+    setSquareParticles(newSquares);
+
+    // Gerar propriedades para os pontos
+    const newDots: ParticleProps[] = [...Array(25)].map(() => ({
+      width: `8px`,
+      height: `8px`,
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      animationDelay: `${Math.random() * 10}s`,
+      animationDuration: `${8 + Math.random() * 4}s`,
+    }));
+    setDotParticles(newDots);
+
+    // Gerar propriedades para as linhas
+    const newLines: ParticleProps[] = [...Array(6)].map(() => ({
+      width: `${60 + Math.random() * 120}px`,
+      height: "1px",
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      animationDelay: `${Math.random() * 30}s`,
+      animationDuration: `${8 + Math.random() * 4}s`,
+      transform: `rotate(${Math.random() * 360}deg)`,
+    }));
+    setLineParticles(newLines);
+
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
   // Funções para o modal de demonstração
   const openDemoModal = (project: any) => {
     setCurrentDemoProject(project);
@@ -213,6 +268,9 @@ export default function Portfolio() {
             background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(14, 165, 233, 0.15), transparent 40%)`,
           }}
         ></div>
+
+        {/* Blur overlay para melhorar legibilidade */}
+        <div className="absolute inset-0 backdrop-blur-sm pointer-events-none"></div>
 
         {/* Enhanced Grid Pattern */}
         <div className="absolute inset-0 bg-enhanced-grid opacity-10"></div>
@@ -327,7 +385,7 @@ export default function Portfolio() {
       <section
         ref={heroRef}
         id="inicio"
-        className="relative z-10 pt-32 scroll-mt-32 min-h-screen flex items-start justify-center"
+        className="relative z-10 pt-32 scroll-mt-32 min-h-screen flex items-center justify-center -mt-12"
       >
         <div className="text-center px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
           <div className="mb-8">
@@ -384,7 +442,7 @@ export default function Portfolio() {
       </section>
 
       {/* Sobre Section */}
-      <section id="sobre" className="relative z-10 py-20 min-h-screen">
+      <section id="sobre" className="relative z-10 py-20 min-h-screen flex items-center justify-center">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center gap-10">
           {/* Foto do autor (opcional) */}
           <div className="flex-shrink-0 mb-8 md:mb-0">
@@ -412,7 +470,7 @@ export default function Portfolio() {
       </section>
 
       {/* Projects Section */}
-      <section id="projetos" className="relative z-10 py-20 min-h-screen">
+      <section id="projetos" className="relative z-10 py-20 min-h-screen flex items-center justify-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-5xl md:text-6xl font-black text-white mb-6">
@@ -604,7 +662,7 @@ export default function Portfolio() {
       </Dialog>
 
       {/* Skills Section */}
-      <section id="skills" className="relative z-10 py-20 min-h-screen">
+      <section id="skills" className="relative z-10 py-20 min-h-screen flex items-center justify-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-5xl md:text-6xl font-black text-white mb-6">
@@ -727,7 +785,7 @@ export default function Portfolio() {
       </section>
 
       {/* Contact Section */}
-      <section id="contato" className="relative z-10 py-20 min-h-screen">
+      <section id="contato" className="relative z-10 py-20 flex items-center justify-center" style={{ minHeight: 'calc(100vh - 80px)' }}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-5xl md:text-6xl font-black text-white mb-6">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">
