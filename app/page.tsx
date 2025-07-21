@@ -133,14 +133,21 @@ export default function Portfolio() {
     setSquareParticles(newSquares);
 
     // Gerar propriedades para os pontos
-    const newDots: ParticleProps[] = [...Array(25)].map(() => ({
-      width: `8px`,
-      height: `8px`,
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      animationDelay: `${Math.random() * 10}s`,
-      animationDuration: `${8 + Math.random() * 4}s`,
-    }));
+    const newDots: ParticleProps[] = [...Array(25)].map(() => {
+      // 0-30% ou 70-100% para as laterais
+      const isLeft = Math.random() < 0.5;
+      const left = isLeft
+        ? Math.random() * 30 // 0-30%
+        : 70 + Math.random() * 30; // 70-100%
+      return {
+        width: `8px`,
+        height: `8px`,
+        left: `${left}%`,
+        top: `${Math.random() * 100}%`,
+        animationDelay: `${Math.random() * 10}s`,
+        animationDuration: `${8 + Math.random() * 4}s`,
+      };
+    });
     setDotParticles(newDots);
 
     // Gerar propriedades para as linhas
@@ -256,6 +263,10 @@ export default function Portfolio() {
       featured: false,
     },
   ];
+
+  // Estados para modais de privacidade e termos
+  const [showPrivacidade, setShowPrivacidade] = useState(false);
+  const [showTermos, setShowTermos] = useState(false);
 
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
@@ -860,12 +871,43 @@ export default function Portfolio() {
 
       {/* Footer */}
       <footer className="relative z-10 py-8 border-t border-cyan-500/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-gray-400">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 items-center gap-4">
+          <div></div>
+          <p className="text-gray-400 text-center">
             © 2025 • Desenvolvido por Danrley Ferraz
           </p>
+          <div className="flex gap-6 text-sm justify-center md:justify-end">
+            <button onClick={() => setShowPrivacidade(true)} className="text-cyan-400 hover:underline focus:outline-none">Política de Privacidade</button>
+            <button onClick={() => setShowTermos(true)} className="text-cyan-400 hover:underline focus:outline-none">Termos de Uso</button>
+          </div>
         </div>
       </footer>
+
+      {/* Modal Política de Privacidade */}
+      <Dialog open={showPrivacidade} onOpenChange={setShowPrivacidade}>
+        <DialogContent className="max-w-lg bg-black text-white border border-cyan-500/30">
+          <DialogHeader>
+            <DialogTitle className="text-cyan-400">Política de Privacidade</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 text-base">
+            <p>Sua privacidade é importante para nós. Este site não coleta dados pessoais sensíveis, mas pode utilizar cookies e ferramentas de análise para melhorar sua experiência. Ao navegar, você concorda com nossa política.</p>
+            <p>Para dúvidas sobre privacidade, entre em contato pelo e-mail informado no site.</p>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal Termos de Uso */}
+      <Dialog open={showTermos} onOpenChange={setShowTermos}>
+        <DialogContent className="max-w-lg bg-black text-white border border-cyan-500/30">
+          <DialogHeader>
+            <DialogTitle className="text-cyan-400">Termos de Uso</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 text-base">
+            <p>Ao acessar este site, você concorda em utilizar o conteúdo apenas para fins pessoais e não comerciais. O conteúdo apresentado é protegido por direitos autorais e não pode ser reproduzido sem autorização.</p>
+            <p>Reservamo-nos o direito de alterar estes termos a qualquer momento, sem aviso prévio.</p>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Botões de navegação entre seções */}
       {(() => {
