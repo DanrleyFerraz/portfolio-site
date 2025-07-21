@@ -245,20 +245,19 @@ export default function Portfolio() {
     },
     // Exemplo de projeto adicional (opcional)
     {
-      title: "Dashboard de Vendas Inteligente",
+      title: "ConcreteSolver",
       description:
-        "Painel interativo para análise de vendas, permitindo identificar tendências, oportunidades e otimizar estratégias comerciais.",
-      image: "/placeholder.svg?height=200&width=300",
-      technologies: ["Power BI", "Python", "SQL"],
-      github: "https://github.com/seuusuario/dashboard-vendas",
+        "Aplicativo acadêmico desenvolvido para cálculo de volumes de concreto, fluxo e tensões internas em estruturas, facilitando o dimensionamento e análise de projetos de engenharia civil.",
+      image: "/concrete.png",
+      technologies: ["C#", "Avalonia UI", ".NET"],
+      github: "#", // Adicione o link do repositório se desejar
       demo: "modal",
       demoContent: {
         type: "images",
         images: [
-          "/dashboard-1.png",
-          "/dashboard-2.png"
+          "/concrete2.png"
         ],
-        description: "Dashboard interativo para análise de vendas com gráficos dinâmicos e relatórios personalizados."
+        description: "Calcule volumes de concreto, fluxo e tensões internas em estruturas de engenharia civil de forma prática e rápida. Ideal para estudantes e profissionais da área."
       },
       featured: false,
     },
