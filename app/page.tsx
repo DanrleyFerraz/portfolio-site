@@ -870,7 +870,7 @@ export default function Portfolio() {
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 py-8 border-t border-cyan-500/20">
+      <footer className="relative z-10 py-6 border-t border-cyan-500/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 items-center gap-4">
           <div></div>
           <p className="text-gray-400 text-center">
