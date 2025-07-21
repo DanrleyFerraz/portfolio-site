@@ -8,7 +8,8 @@ import {
   ExternalLink,
   Code,
   Globe,
-  ChevronDown,
+  ArrowDown,
+  ArrowUp,
   Menu,
   X,
   Zap,
@@ -53,65 +54,54 @@ export default function Portfolio() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const heroRef = useRef<HTMLElement>(null);
 
+  // Estado para mostrar a seta para cima
+  const [showScrollUp, setShowScrollUp] = useState(false);
+
   // Dentro do componente Portfolio, adicione esses estados no início
   const [circleParticles, setCircleParticles] = useState<ParticleProps[]>([]);
   const [squareParticles, setSquareParticles] = useState<ParticleProps[]>([]);
   const [dotParticles, setDotParticles] = useState<ParticleProps[]>([]);
   const [lineParticles, setLineParticles] = useState<ParticleProps[]>([]);
 
+  // Lista de IDs das seções na ordem
+  const sectionIds = ['inicio', 'sobre', 'projetos', 'skills', 'contato'];
+  const [currentSection, setCurrentSection] = useState('inicio');
+
+  // Substitua o useEffect de detecção de seção atual por uma lógica mais robusta:
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+    const handleScrollSection = () => {
+      const viewportCenter = window.innerHeight / 2;
+      let closestId = sectionIds[0];
+      let minDistance = Infinity;
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          const distance = Math.abs(rect.top + rect.height / 2 - viewportCenter);
+          // Log para depuração
+          console.log({ id, distance, rectTop: rect.top, rectHeight: rect.height, viewportCenter });
+          if (distance < minDistance) {
+            minDistance = distance;
+            closestId = id;
+          }
+        }
+      }
+      setCurrentSection(closestId);
+      // Log para depuração
+      console.log('currentSection:', closestId);
     };
-    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener('scroll', handleScrollSection);
+    handleScrollSection();
+    return () => window.removeEventListener('scroll', handleScrollSection);
+  }, []);
 
-    // Gerar propriedades para os círculos
-    const newCircles: ParticleProps[] = [...Array(8)].map(() => ({
-      width: `${20 + Math.random() * 40}px`,
-      height: `${20 + Math.random() * 40}px`,
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      animationDelay: `${Math.random() * 15}s`,
-      animationDuration: `${8 + Math.random() * 4}s`,
-    }));
-    setCircleParticles(newCircles);
-
-    // Gerar propriedades para os quadrados
-    const newSquares: ParticleProps[] = [...Array(12)].map(() => ({
-      width: `${8 + Math.random() * 16}px`,
-      height: `${8 + Math.random() * 16}px`,
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      animationDelay: `${Math.random() * 20}s`,
-      animationDuration: `${8 + Math.random() * 4}s`,
-    }));
-    setSquareParticles(newSquares);
-
-    // Gerar propriedades para os pontos
-    const newDots: ParticleProps[] = [...Array(25)].map(() => ({
-      width: `8px`,
-      height: `8px`,
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      animationDelay: `${Math.random() * 10}s`,
-      animationDuration: `${8 + Math.random() * 4}s`,
-    }));
-    setDotParticles(newDots);
-
-    // Gerar propriedades para as linhas
-    const newLines: ParticleProps[] = [...Array(6)].map(() => ({
-      width: `${60 + Math.random() * 120}px`,
-      height: "1px",
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      animationDelay: `${Math.random() * 30}s`,
-      animationDuration: `${8 + Math.random() * 4}s`,
-      transform: `rotate(${Math.random() * 360}deg)`,
-    }));
-    setLineParticles(newLines);
-
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []); // O array vazio garante que isso rode apenas uma vez no mount.
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollUp(window.scrollY > 100);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Funções para o modal de demonstração
   const openDemoModal = (project: any) => {
@@ -150,7 +140,7 @@ export default function Portfolio() {
       description:
         "Aplicativo web desenvolvido como projeto acadêmico, simulando operações bancárias reais. Fui responsável pelo design, implementação e manutenção do banco de dados PostgreSQL, garantindo integridade, segurança e performance dos dados. Também atuei como desenvolvedor backend, criando APIs RESTful e regras de negócio utilizando Spring Boot.",
       image: "bancoinicio.png",
-      technologies: ["PostgreSQL", "Spring Boot", "Java", "APIs REST"],
+      technologies: ["Spring Boot", "Java", "PostgreSQL", "APIs REST", "Insomnia"],
       github: "https://github.com/seuusuario/sistema-bancario-web",
       demo: "modal",
       demoContent: {
@@ -169,7 +159,7 @@ export default function Portfolio() {
       title: "Landing Pages Modernas",
       description:
         "Desenvolvimento de landing pages responsivas e otimizadas para diferentes clientes e projetos acadêmicos. Foco em design moderno, performance, SEO e experiência do usuário. Utilização de React, Next.js e Tailwind CSS para criar interfaces atraentes e funcionais.",
-      image: "/placeholder.svg?height=200&width=300",
+      image: "landing1.png",
       technologies: [
         "React",
         "Next.js",
@@ -178,16 +168,16 @@ export default function Portfolio() {
         "CSS",
         "JavaScript",
       ],
-      github: "https://github.com/seuusuario/landing-pages",
+      github: "douglasferraz.vercel.app",
       demo: "modal",
       demoContent: {
         type: "images",
         images: [
-          "/landing-1.png",
-          "/landing-2.png",
-          "/landing-3.png"
+          "/landing2.png",
+          "/landing3.png",
+          "/landing4.png"
         ],
-        description: "Landing pages modernas e responsivas desenvolvidas para diversos clientes, com foco em conversão e experiência do usuário."
+        description: "Landing pages modernas e responsivas desenvolvidas para diversos clientes, com foco em conversão e experiência do usuário. Também oferecemos a criação de formulários de contato totalmente integrados à página, facilitando a comunicação direta entre você e seus clientes."
       },
       featured: false,
     },
@@ -294,17 +284,27 @@ export default function Portfolio() {
 
             {/* Desktop Menu */}
             <div className="hidden md:flex space-x-8">
-              {["Início", "Projetos", "Sobre", "Skills", "Contato"].map(
-                (item, index) => (
-                  <a
-                    key={item}
-                    href={`#${item.toLowerCase()}`}
-                    className="relative text-white hover:text-cyan-400 transition-all duration-300 group"
-                  >
-                    {item}
-                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-purple-400 group-hover:w-full transition-all duration-300"></span>
-                  </a>
-                )
+              {["Início", "Sobre", "Projetos", "Skills", "Contato"].map(
+                (item) => {
+                  const id = item === "Início" ? "inicio" : item.toLowerCase();
+                  return (
+                    <a
+                      key={item}
+                      href={`#${id}`}
+                      className="relative text-white hover:text-cyan-400 transition-all duration-300 group"
+                      onClick={e => {
+                        e.preventDefault();
+                        const section = document.getElementById(id);
+                        if (section) {
+                          section.scrollIntoView({ behavior: 'smooth' });
+                        }
+                      }}
+                    >
+                      {item}
+                      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-purple-400 group-hover:w-full transition-all duration-300"></span>
+                    </a>
+                  );
+                }
               )}
             </div>
 
@@ -326,7 +326,7 @@ export default function Portfolio() {
       {/* Hero Section */}
       <section
         ref={heroRef}
-        id="início"
+        id="inicio"
         className="relative z-10 pt-32 scroll-mt-32 min-h-screen flex items-start justify-center"
       >
         <div className="text-center px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
@@ -381,15 +381,38 @@ export default function Portfolio() {
             ))}
           </div>
         </div>
+      </section>
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <ChevronDown className="w-8 h-8 text-cyan-400" />
+      {/* Sobre Section */}
+      <section id="sobre" className="relative z-10 py-20 min-h-screen">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center gap-10">
+          {/* Foto do autor (opcional) */}
+          <div className="flex-shrink-0 mb-8 md:mb-0">
+            <img
+              src="/dan.png"
+              alt="Foto de Danrley Ferraz"
+              className="w-40 h-40 rounded-full object-cover border-4 border-cyan-500/40 shadow-lg"
+            />
+          </div>
+          {/* Texto sobre */}
+          <div>
+            <h2 className="text-5xl md:text-6xl font-black text-white mb-6">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">
+                SOBRE
+              </span>
+            </h2>
+            <p className="text-xl text-gray-300 max-w-2xl leading-relaxed">
+              Olá! Meu nome é <span className="text-cyan-400 font-semibold">Danrley</span>, tenho 25 anos e sou engenheiro de software. Sou uma pessoa completamente apaixonada por tecnologia e por ajudar. Acredito que a tecnologia pode transformar a vida das pessoas, assim como transformou a minha.<br /><br />
+              Atualmente curso Engenharia de Software e Gestão em TI, além de já ter feito diversos cursos técnicos desde 2017. O que mais me motiva é criar soluções que resolvem problemas reais e impactam positivamente as pessoas.<br /><br />
+              Tenho experiência com Python, Java, Spring Boot, bancos de dados (MySQL, PostgreSQL, MongoDB) e, no frontend, gosto de trabalhar com React, JavaScript, CSS, HTML, Tailwind e Next.js.<br /><br />
+              Meu objetivo é evoluir cada vez mais como desenvolvedor, ajudando mais pessoas através da tecnologia. Fora do código, sou competidor de Jiu Jitsu, esporte que me ensina disciplina e resiliência.
+            </p>
+          </div>
         </div>
       </section>
 
       {/* Projects Section */}
-      <section id="projetos" className="relative z-10 py-20">
+      <section id="projetos" className="relative z-10 py-20 min-h-screen">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-5xl md:text-6xl font-black text-white mb-6">
@@ -448,21 +471,7 @@ export default function Portfolio() {
                     ))}
                   </div>
                   <div className="flex gap-4">
-                    <Button
-                      asChild
-                      size="sm"
-                      variant="outline"
-                      className="border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-black bg-transparent"
-                    >
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Github className="w-4 h-4 mr-2" />
-                        Código
-                      </a>
-                    </Button>
+
                     <Button
                       asChild
                       size="sm"
@@ -471,7 +480,7 @@ export default function Portfolio() {
                       {project.demo === "modal" ? (
                         <button onClick={() => openDemoModal(project)}>
                           <ExternalLink className="w-4 h-4 mr-2" />
-                          Demo Live
+                          Demonstração
                         </button>
                       ) : (
                         <a
@@ -519,7 +528,7 @@ export default function Portfolio() {
                       <img
                         src={currentDemoProject.demoContent.images[currentImageIndex]}
                         alt={`${currentDemoProject.title} - Imagem ${currentImageIndex + 1}`}
-                        className="w-full h-full object-contain transition-all duration-700 ease-out"
+                        className="w-full h-full object-scale-down transition-all duration-700 ease-out"
                       />
                       
                       {/* Overlay gradiente */}
@@ -573,11 +582,11 @@ export default function Portfolio() {
               
               {/* Tecnologias - Ocupa 1/3 do espaço */}
               <div className="lg:col-span-1">
-                <div className="bg-gradient-to-br from-cyan-500/5 via-purple-500/5 to-pink-500/5 rounded-lg border border-cyan-500/20 p-6 h-full hover:border-cyan-500/40 transition-all duration-500">
+                <div className="bg-gradient-to-br from-cyan-500/5 via-purple-500/5 to-pink-500/5 rounded-lg border border-cyan-500/20 p-6 h-full hover:border-cyan-500/40 transition-all duration-500 flex flex-col justify-center items-center">
                   <h3 className="text-xl font-bold text-cyan-400 mb-6 text-center">
                     Tecnologias Utilizadas
                   </h3>
-                  <div className="flex flex-wrap gap-3 justify-center mb-8">
+                  <div className="flex flex-wrap gap-3 justify-center items-center">
                     {currentDemoProject?.technologies?.map((tech: string, index: number) => (
                       <Badge
                         key={index}
@@ -587,25 +596,6 @@ export default function Portfolio() {
                       </Badge>
                     ))}
                   </div>
-                  
-                  {/* Links do projeto */}
-                  <div className="space-y-4">
-                    <Button
-                      asChild
-                      size="sm"
-                      variant="outline"
-                      className="w-full border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-black bg-transparent hover:scale-105 transition-all duration-300"
-                    >
-                      <a
-                        href={currentDemoProject?.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Github className="w-4 h-4 mr-2" />
-                        Ver Código
-                      </a>
-                    </Button>
-                  </div>
                 </div>
               </div>
             </div>
@@ -614,7 +604,7 @@ export default function Portfolio() {
       </Dialog>
 
       {/* Skills Section */}
-      <section id="skills" className="relative z-10 py-20">
+      <section id="skills" className="relative z-10 py-20 min-h-screen">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-5xl md:text-6xl font-black text-white mb-6">
@@ -737,15 +727,15 @@ export default function Portfolio() {
       </section>
 
       {/* Contact Section */}
-      <section id="contato" className="relative z-10 py-20">
+      <section id="contato" className="relative z-10 py-20 min-h-screen">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-5xl md:text-6xl font-black text-white mb-6">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">
-              VAMOS CRIAR
+              VAMOS CRIAR?
             </span>
           </h2>
           <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
-            Pronto para transformar sua visão em realidade digital? Vamos
+            Você está pronto para transformar sua visão em realidade digital? Vamos
             construir algo extraordinário juntos.
           </p>
 
@@ -755,9 +745,9 @@ export default function Portfolio() {
               size="lg"
               className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white px-8 py-4 text-lg font-semibold"
             >
-              <a href="mailto:seuemail@dominio.com">
+              <a href="mailto:danrleyf.dev@gmail.com">
                 <Mail className="w-5 h-5 mr-2" />
-                Iniciar Projeto
+                Entre em contato!
               </a>
             </Button>
             <div className="flex gap-4">
@@ -768,7 +758,7 @@ export default function Portfolio() {
                 className="border-2 border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-black bg-transparent p-4"
               >
                 <a
-                  href="https://github.com/seuusuario"
+                  href="https://github.com/DanrleyFerraz"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -782,7 +772,7 @@ export default function Portfolio() {
                 className="border-2 border-purple-500 text-purple-400 hover:bg-purple-500 hover:text-white bg-transparent p-4"
               >
                 <a
-                  href="https://linkedin.com/in/seuusuario"
+                  href="https://www.linkedin.com/in/danrleyferraz/"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -795,16 +785,16 @@ export default function Portfolio() {
           {/* Contact Stats */}
           <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto">
             <div className="text-center">
-              <div className="text-3xl font-bold text-cyan-400 mb-2">15+</div>
+              <div className="text-3xl font-bold text-cyan-400 mb-2">+25</div>
               <div className="text-gray-400">Projetos</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-purple-400 mb-2">2+</div>
-              <div className="text-gray-400">Anos estudando</div>
+              <div className="text-3xl font-bold text-purple-400 mb-2">+7</div>
+              <div className="text-gray-400">Anos de experiência em projetos</div>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-pink-400 mb-2">100%</div>
-              <div className="text-gray-400">Dedicação</div>
+              <div className="text-gray-400">Dedicado em entregar o melhor resultado para você</div>
             </div>
           </div>
         </div>
@@ -814,10 +804,52 @@ export default function Portfolio() {
       <footer className="relative z-10 py-8 border-t border-cyan-500/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-gray-400">
-            © 2024 • Desenvolvido com 🚀 e muita ☕ • Powered by Next.js
+            © 2025 • Desenvolvido por Danrley Ferraz
           </p>
         </div>
       </footer>
+
+      {/* Botões de navegação entre seções */}
+      {(() => {
+        const idx = sectionIds.indexOf(currentSection);
+        if (idx === -1) return null;
+        const prevId = idx > 0 ? sectionIds[idx - 1] : null;
+        const nextId = idx < sectionIds.length - 1 ? sectionIds[idx + 1] : null;
+        return (
+          <div className="fixed bottom-8 right-8 z-50 flex flex-col gap-4 items-center justify-center">
+            {/* Botão para cima */}
+            {prevId && (
+              <button
+                className="bg-black/70 hover:bg-cyan-500/80 text-cyan-400 hover:text-white p-3 rounded-full shadow-lg border border-cyan-500 transition-all duration-300 focus:outline-none"
+                aria-label="Ir para seção anterior"
+                onClick={() => {
+                  const prevSection = document.getElementById(prevId);
+                  if (prevSection) {
+                    prevSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+              >
+                <ArrowUp className="w-7 h-7" />
+              </button>
+            )}
+            {/* Botão para baixo */}
+            {nextId && (
+              <button
+                className="bg-black/70 hover:bg-cyan-500/80 text-cyan-400 hover:text-white p-3 rounded-full shadow-lg border border-cyan-500 transition-all duration-300 focus:outline-none"
+                aria-label="Ir para próxima seção"
+                onClick={() => {
+                  const nextSection = document.getElementById(nextId);
+                  if (nextSection) {
+                    nextSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+              >
+                <ArrowDown className="w-7 h-7" />
+              </button>
+            )}
+          </div>
+        );
+      })()}
     </div>
   );
 }
